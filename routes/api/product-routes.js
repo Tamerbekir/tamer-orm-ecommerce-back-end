@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     const allProducts = await Product.findAll({
       //! this includes finding all products in the Category table, as well as the Tag model 
       //! the Tag data is included through the ProductTag table, which links products with tags.
-      include: [{ model: Category, as: 'category' }, { model: Tag, as: 'tag', through: ProductTag }]
+      include: [{ model: Category, as: 'category' }, { model: Tag, as: 'tags' }]
     });
     res.status(200).json(allProducts);
   } catch (err) {
@@ -28,8 +28,8 @@ router.get('/:id', async (req, res) => {
   try {
     const singleProduct = await Product.findByPk(req.params.id, {
       //! this includes the associated table from the Category and Tag table for the single product
-      //! the Tag data is include through the ProductTag table, which links the products with tags.
-      include: [{ model: Category, as: 'category' }, { model: Tag, as: 'tag', through: ProductTag }]
+      //! the Tag table will have the alias of 'tags' and category named 'category' for the json response
+      include: [{ model: Category, as: 'category' }, { model: Tag, as: 'tags' }]
     });
 
     if (!singleProduct) {
@@ -52,9 +52,9 @@ router.get('/:id', async (req, res) => {
   }
 */
 //! added the ability to post a new product
-router.post('/', async (req, res) => {
+router.post('/', (req, res) => {
   try {
-    const newProduct = await Product.create(req.body, {
+    const newProduct = (req.body, {
       //! the name, price, and stock and tag are taken directly from the request body
         product_name: req.body.product_name,
         price: req.body.price,

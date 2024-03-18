@@ -9,10 +9,11 @@ router.get('/', async (req, res) => {
   //! added the ability to find all tags
   try {
     //! Including tags along with their associated Product. 
-    //! The connection/link between Tag and Product is made through the ProductTag join table when searching for a all Tags.
+    //! The connection/link between Tag and Product join table when searching for a all Tags.
+     //! giving it the alias 'product' for our JSON response
 
     const getAllTags = await Tag.findAll({
-      include: [{ model: Product, as: 'products', through: ProductTag }]
+      include: [{ model: Product, as: 'products' }]
     });
     if (!getAllTags) {
       res.status(404).json({ message: 'No tags Found.' });
@@ -29,11 +30,11 @@ router.get('/:id', async (req, res) => {
   // be sure to include its associated Product data
   //! Added the ability to find a tag by a single id
   //! Including tags along with their associated products. 
-  //! The connection/link between Tag and Product is made through the ProductTag join table when searching for a single Tag.
+  //! The connection/link between Tag and Product join table when searching for a single Tag.
   try {
     const singleTag = await Tag.findByPk(req.params.id, {
-      //! including the Product table with the name as products when requesting data through ProductTag
-      include: [{ model: Product, as: 'products', through: ProductTag }]
+      //! including the Product table and giving it an alias 'products' for the JSON response
+      include: [{ model: Product, as: 'products' }]
     });
 
     if (!singleTag) {
@@ -82,7 +83,7 @@ router.delete('/:id', async (req, res) => {
   // delete on tag by its `id` value
   //! added the ability to delete a tag by an associated id
   try {
-    const deleteTag = Tag.destroy({
+    const deleteTag =  await Tag.destroy({
       where: {
         id: req.params.id
       }
