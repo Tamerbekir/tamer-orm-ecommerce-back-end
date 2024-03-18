@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     //! The connection/link between Tag and Product is made through the ProductTag join table when searching for a all Tags.
 
     const getAllTags = await Tag.findAll({
-      include: [{ model: Product, through: ProductTag }]
+      include: [{ model: Product, as: 'products', through: ProductTag }]
     });
     if (!getAllTags) {
       res.status(404).json({ message: 'No tags Found.' });
@@ -32,7 +32,8 @@ router.get('/:id', async (req, res) => {
   //! The connection/link between Tag and Product is made through the ProductTag join table when searching for a single Tag.
   try {
     const singleTag = await Tag.findByPk(req.params.id, {
-      include: [{ model: Product, through: ProductTag }]
+      //! including the Product table with the name as products when requesting data through ProductTag
+      include: [{ model: Product, as: 'products', through: ProductTag }]
     });
 
     if (!singleTag) {

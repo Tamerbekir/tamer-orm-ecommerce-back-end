@@ -10,7 +10,8 @@ router.get('/', async (req, res) => {
   //! finding all categories including Product table
   try {
     const allCategories = await Category.findAll({
-      include: [{ model: Product }]
+      //! including the Product table with the name as products when requesting data
+      include: [{ model: Product, as: 'products' }]
     });
     res.status(200).json(allCategories);
   } catch (err) {
@@ -25,7 +26,8 @@ router.get('/:id', async (req, res) => {
   //! added includes method to find category 
   try {
     const singleCategory = await Category.findByPk(req.params.id, {
-      include: [{ model: Product, through: ProductTag }]
+      //! including the Product table with the name as products when requesting data
+      include: [{ model: Product, as: 'products' }]
     });
     //! added status response to no id/category was found, as well as other errors, otherwise OK(200) status
     if (!singleCategory) {
