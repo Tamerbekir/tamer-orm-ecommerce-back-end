@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
   //! added the ability to create a new tag
   try {
     const createTag = await Tag.create(req.body);
-    res.status(200).json(createTag);
+    res.status(200).json(createTag)
   } catch (err) {
     res.status(400).json(err);
   }
@@ -73,7 +73,7 @@ router.put('/:id', async (req, res) => {
       return;
     }
 
-    res.status(200).json(updateTag)
+    res.status(200).json(`id:${req.params.id} successfully updated.`);
   } catch (err) {
     res.status(500).json(err)
   }
@@ -92,9 +92,9 @@ router.delete('/:id', async (req, res) => {
     if (!deleteTag) {
       res.status(404).json({ message: 'No tag with this id found' });
       return;
-  }
+    }
 
-    res.status(200).json(deleteTag);
+    res.status(200).json(`id:${req.params.id} successfully deleted.`);
   } catch (err) {
     res.status(500).json(err);
   }
