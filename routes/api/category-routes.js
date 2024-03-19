@@ -55,7 +55,7 @@ router.put('/:id', async (req, res) => {
   // update a category by its `id` value
   //! added the ability to update a category with associated id
   try {
-    const updateCategory = await Category.update({
+    const updateCategory = await Category.update(req.body, {
       where: {
         id: req.params.id
       }
